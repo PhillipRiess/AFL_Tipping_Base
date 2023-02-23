@@ -40,7 +40,14 @@ def clean_games_data(games_df, team_code_df, table_hist_df):
     games_df = pd.merge(games_df, table_hist_df, left_on=['Home Team','round_key','year_key'], right_on=['Team','Round','Year'], how='left')
     games_df = pd.merge(games_df, table_hist_df, left_on=['Away Team','round_key','year_key'], right_on=['Team','Round','Year'], suffixes=('_home','_away'), how='left')
 
+    # Create the target column and then from the winning team column
+    games_df['target'] = games_df.apply(lambda x: 1 if x['Winning team'] == x['Home Team'] else 0, axis=1)
+
+    # Drop N/A rows and duplicated columns from dataset 
     games_df = games_df.dropna(subset=['Team_home'])
-    games_df.reset_index(inplace=True)
+    games_df = games_df.drop(['round_key','year_key','Team_home','Round_y','Year_home','Team_away','Round','Year_away','Winning team'], axis=1)
+    games_df = games_df.rename(columns={'Round_x':'Round'})
+
+    games_df.reset_index(inplace=True, drop=True)
     
     return games_df
