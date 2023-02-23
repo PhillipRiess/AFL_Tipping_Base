@@ -1,12 +1,6 @@
 from pyAFL.seasons.models import Season
-import pandas as pd
 
-try:
-    from pyAFL.seasons.models import Season
-except ImportError:
-    print("pyAFL library not found. Installing...")
-    !pip install pyAFL
-    from pyAFL.seasons.models import Season
+import pandas as pd
 
 def get_season_stats(start_year, end_year):
     '''
@@ -22,5 +16,6 @@ def get_season_stats(start_year, end_year):
         games = pd.concat([games, stats_match], axis=0)
 
     games.reset_index(inplace=True, drop=True)
+    games = games.rename(columns={'Home team':'Home Team'})
 
     return games

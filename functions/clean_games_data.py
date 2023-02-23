@@ -29,7 +29,7 @@ def clean_games_data(games_df, team_code_df, table_hist_df):
     games_df['year_key'] = games_df.apply(lambda x: x['year'] - 1 if x['Round'] == 1 else x['year'], axis=1)
     
     # Merge all the tables together in preparation for the detailed stats
-    games_df = pd.merge(games_df, team_code_df[['Team','Code']], left_on='Home team', right_on='Team', how='left')
+    games_df = pd.merge(games_df, team_code_df[['Team','Code']], left_on='Home Team', right_on='Team', how='left')
     games_df = games_df.drop('Team', axis=1)
     games_df = games_df.rename(columns={'Code':'HomeCode'})
 
@@ -37,7 +37,7 @@ def clean_games_data(games_df, team_code_df, table_hist_df):
     games_df = games_df.drop('Team', axis=1)
     games_df = games_df.rename(columns={'Code':'AwayCode'})
 
-    games_df = pd.merge(games_df, table_hist_df, left_on=['Home team','round_key','year_key'], right_on=['Team','Round','Year'], how='left')
+    games_df = pd.merge(games_df, table_hist_df, left_on=['Home Team','round_key','year_key'], right_on=['Team','Round','Year'], how='left')
     games_df = pd.merge(games_df, table_hist_df, left_on=['Away Team','round_key','year_key'], right_on=['Team','Round','Year'], suffixes=('_home','_away'), how='left')
 
     games_df = games_df.dropna(subset=['Team_home'])
