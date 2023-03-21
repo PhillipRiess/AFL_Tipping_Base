@@ -11,7 +11,7 @@ def get_season_stats(start_year, end_year):
     
     for year in range(start_year, end_year+1):
         season = Season(year)
-        stats = season.get_season_stats()
+        stats = season.get_season_stats(force_live=True)
         stats_match = stats.match_summary
         games = pd.concat([games, stats_match], axis=0)
 

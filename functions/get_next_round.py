@@ -10,6 +10,13 @@ def get_next_round():
     url = requests.get(f'https://finalsiren.com')
     dfs = pd.read_html(url.text)
     data = pd.DataFrame(data=dfs[0])
+    dlen = len(data.columns)
+
+    if dlen != 10:
+        data = pd.DataFrame(data=dfs[9])
+    else:
+        data
+
     data = data.rename(columns={'Gnd':'Venue'})
 
     def convert_date(date_str):
@@ -25,7 +32,11 @@ def get_next_round():
     # Scrape the round number
     response = requests.get('https://finalsiren.com').text
     soup = BeautifulSoup(response, "lxml")
-    rd = soup.find_all('h2')[0].text
+    
+    if dlen != 10:
+        rd = soup.find_all('h2')[1].text
+    else:
+        rd = soup.find_all('h2')[0].text
 
     match = re.search(r'Round (\d+)', rd)
 

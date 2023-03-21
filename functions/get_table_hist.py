@@ -33,7 +33,12 @@ def get_table_hist(start_year, end_year, end=23):
             url = requests.get(
                 f'https://finalsiren.com/AFLLadder.asp?AFLLadderTypeID=2&SeasonID={year}&Round={rd}-1')
             dfs = pd.read_html(url.text)
+
             data = pd.DataFrame(data=dfs[0])
+
+            if rd > 1 and len(dfs[0].columns) == 25:
+                
+                break
 
             if rd == 1:
                 data.columns = ['Pos', 'Team', 'P', 'W', 'D', 'L', 'For', 'Agn', 'Max', 'Min', 'Home_W', 'Home_D', 'Home_L', 'Away_W',
