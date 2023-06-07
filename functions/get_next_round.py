@@ -12,10 +12,13 @@ def get_next_round():
     data = pd.DataFrame(data=dfs[0])
     dlen = len(data.columns)
 
-    if dlen != 10:
-        data = pd.DataFrame(data=dfs[9])
-    else:
-        data
+    for i in range(10):
+        if len(dfs[i].columns) == 10:
+            data = pd.DataFrame(data=dfs[i])
+            break
+
+    if data is None:
+        raise ValueError("No DataFrame found with 10 columns")
 
     data = data.rename(columns={'Gnd':'Venue'})
 

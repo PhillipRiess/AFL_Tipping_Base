@@ -2,6 +2,10 @@ import pandas as pd
 from bs4 import BeautifulSoup
 from datetime import datetime
 import requests
+import time
+from requests.adapters import Retry
+from requests.packages.urllib3.util.retry import Retry
+from requests.adapters import HTTPAdapter
 
 def get_table_hist(start_year, end_year, end=23):
     '''
@@ -21,6 +25,12 @@ def get_table_hist(start_year, end_year, end=23):
 
     '''
 
+    session = requests.Session()  
+    retries = Retry(total=5, backoff_factor=0.1, status_forcelist=[ 500, 502, 503, 504 ])
+    adapter = HTTPAdapter(max_retries=retries)
+    session.mount('http://', adapter)
+    session.mount('https://', adapter)
+
     rd = 1
     end = end
 
@@ -30,8 +40,9 @@ def get_table_hist(start_year, end_year, end=23):
 
         while rd <= end:
 
-            url = requests.get(
+            url = session.get(
                 f'https://finalsiren.com/AFLLadder.asp?AFLLadderTypeID=2&SeasonID={year}&Round={rd}-1')
+            
             dfs = pd.read_html(url.text)
 
             data = pd.DataFrame(data=dfs[0])
