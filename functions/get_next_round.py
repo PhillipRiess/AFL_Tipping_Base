@@ -23,7 +23,10 @@ def get_next_round():
     data = data.rename(columns={'Gnd':'Venue'})
 
     def convert_date(date_str):
-        dt = datetime.strptime(date_str, "%b %d (%a %I:%M%p)")
+        try:  
+            dt = datetime.strptime(date_str, "%b %d (%a %I:%M%p)")  
+        except ValueError:  
+            dt = datetime.strptime(date_str, "%b %d (%a)")  
         current_year = datetime.now().year
         dt = dt.replace(year=current_year)
         return dt.strftime("%Y-%m-%d %H:%M:%S")
